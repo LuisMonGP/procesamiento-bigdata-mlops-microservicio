@@ -1,0 +1,35 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Environments & secrets
+.env
+.venv
+env/
+venv/
+
+# Docker & local mongo state
+.docker/
+mongo_data/
+
+# Dask & Spark logs / scratch
+dask-worker-space/
+derby.log
+metastore_db/
+spark-warehouse/
+
+# Notebooks & Testing
+.ipynb_checkpoints
+.pytest_cache/
+.coverage
+
+# Data policy: exclude raw datasets, keep sample
+data/raw/*
+!data/raw/.gitkeep
+!data/sample/*.csv

@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  mlops-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mlops_fraud_api
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGO_URI=mongodb://mongo_db:27017/
+      - DATABASE_NAME=fintech_mlops_db
+    depends_on:
+      - mongo_db
+    restart: unless-stopped
+    networks:
+      - mlops-network
+
+  mongo_db:
+    image: mongo:6.0
+    container_name: mlops_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    networks:
+      - mlops-network
+
+volumes:
+  mongo_data:
+    driver: local
+
+networks:
+  mlops-network:
+    driver: bridge
