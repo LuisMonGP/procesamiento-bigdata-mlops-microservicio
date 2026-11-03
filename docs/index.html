@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MLOps Fraud Scoring & Dask Big Data Hub | Luis Monge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Barra de Estado Superior -->
+  <header class="top-nav">
+    <div class="brand">
+      <span class="status-indicator live"></span>
+      <span class="brand-title">MLOPS COMMAND CENTER</span>
+      <span class="version-tag">v1.0.0 · PaySim1 Engine</span>
+    </div>
+    <div class="nav-links">
+      <a href="https://github.com/LuisMonGP/procesamiento-bigdata-mlops-microservicio" target="_blank" class="nav-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub Repo
+      </a>
+      <a href="https://portfoliochess.pages.dev" target="_blank" class="nav-btn portfolio-btn">
+        ♟ PortfolioChess
+      </a>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <!-- Hero Header -->
+    <section class="dashboard-hero">
+      <div class="kicker">BIG DATA · DAGS DISTRIBUIDOS · FASTAPI MICROSERVICE</div>
+      <h1>Detección de Fraude en Tiempo Real & Monitor de Arquitectura</h1>
+      <p class="subtitle">
+        Simulador interactivo del contrato REST <code>POST /predict</code> (validado con Pydantic v2) junto al análisis visual de la computación out-of-core de Dask y persistencia híbrida en MongoDB.
+      </p>
+    </section>
+
+    <!-- Panel Grid Principal -->
+    <div class="panels-grid">
+      <!-- Columna Izquierda: Simulador POST /predict -->
+      <section class="card simulator-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="badge method-post">POST</span>
+            <span class="endpoint">/predict</span>
+          </div>
+          <span class="latency-pill" id="live-latency">0.42 ms</span>
+        </div>
+
+        <form id="fraud-form" class="form-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="transaccion_id">ID Transacción</label>
+              <input type="text" id="transaccion_id" value="TXN-405011" required>
+            </div>
+            <div class="form-group">
+              <label for="tipo_operacion">Tipo de Operación</label>
+              <select id="tipo_operacion">
+                <option value="TRANSFER" selected>TRANSFER (Alto Riesgo)</option>
+                <option value="CASH-OUT">CASH-OUT (Alto Riesgo)</option>
+                <option value="PAYMENT">PAYMENT (Comercio)</option>
+                <option value="CASH-IN">CASH-IN (Depósito)</option>
+                <option value="DEBIT">DEBIT (Débito)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="label-with-val">
+              <label for="amount">Monto de la Transacción ($)</label>
+              <span class="dynamic-val" id="val-amount">$250,000</span>
+            </div>
+            <input type="range" id="amount" min="100" max="1000000" step="500" value="250000">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="label-with-val">
+                <label for="oldbalanceOrg">Saldo Inicial Origen</label>
+                <span class="dynamic-val" id="val-oldbalanceOrg">$250,000</span>
+              </div>
+              <input type="range" id="oldbalanceOrg" min="0" max="1000000" step="500" value="250000">
+            </div>
+            <div class="form-group">
+              <div class="label-with-val">
+                <label for="newbalanceOrig">Saldo Final Origen</label>
+                <span class="dynamic-val" id="val-newbalanceOrig">$0</span>
+              </div>
+              <input type="range" id="newbalanceOrig" min="0" max="1000000" step="500" value="0">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <div class="label-with-val">
+                <label for="oldbalanceDest">Saldo Inicial Destino</label>
+                <span class="dynamic-val" id="val-oldbalanceDest">$0</span>
+              </div>
+              <input type="range" id="oldbalanceDest" min="0" max="1000000" step="500" value="0">
+            </div>
+            <div class="form-group">
+              <div class="label-with-val">
+                <label for="newbalanceDest">Saldo Final Destino</label>
+                <span class="dynamic-val" id="val-newbalanceDest">$250,000</span>
+              </div>
+              <input type="range" id="newbalanceDest" min="0" max="1000000" step="500" value="250000">
+            </div>
+          </div>
+
+          <!-- Presets rápidos -->
+          <div class="presets-container">
+            <span class="presets-label">Escenarios Rápidos:</span>
+            <button type="button" class="preset-btn" id="preset-drain">Vaciado de Cuenta</button>
+            <button type="button" class="preset-btn" id="preset-legit">Pago Comercial Típico</button>
+            <button type="button" class="preset-btn" id="preset-cashout">Retiro Masivo</button>
+          </div>
+        </form>
+
+        <!-- Resultado en Vivo -->
+        <div class="verdict-box" id="verdict-container">
+          <div class="verdict-header">
+            <span class="verdict-title">Veredicto del Microservicio</span>
+            <span class="badge-status" id="badge-alert">CRÍTICO</span>
+          </div>
+
+          <div class="score-bar-wrapper">
+            <div class="score-bar-labels">
+              <span>Probabilidad de Fraude</span>
+              <span id="score-text">89.4%</span>
+            </div>
+            <div class="score-progress">
+              <div class="score-fill" id="score-fill" style="width: 89.4%;"></div>
+            </div>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <span class="metric-name">Invariante Contable (errorBalanceOrig)</span>
+              <span class="metric-val" id="res-error">0.00</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-name">Clasificación Binaria</span>
+              <span class="metric-val" id="res-binary">1 (FRAUDE)</span>
+            </div>
+          </div>
+
+          <!-- JSON Payload Inspector -->
+          <div class="json-preview">
+            <div class="json-header">Payload JSON (Pydantic Contract)</div>
+            <pre><code id="json-code"></code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Columna Derecha: DAG Dask & Arquitectura Big Data -->
+      <section class="card dask-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="badge badge-dask">DASK DAG</span>
+            <span>Computación Out-Of-Core vs Pandas</span>
+          </div>
+          <span class="memory-pill">350 MB RAM Streaming</span>
+        </div>
+
+        <div class="dask-body">
+          <p class="section-desc">
+            Al procesar millones de registros (PaySim1), un script tradicional con <code>pandas.read_csv()</code> carga la totalidad en memoria provocando fallos por <strong>Out-Of-Memory (OOM)</strong>. Dask construye un Grafo Acíclico Dirigido (DAG) particionado de evaluación perezosa (<em>Lazy</em>).
+          </p>
+
+          <!-- Diagrama Interactivo de Nodos Dask -->
+          <div class="dag-pipeline">
+            <div class="dag-node node-active">
+              <div class="node-icon">📦</div>
+              <div class="node-info">
+                <strong>read_csv()</strong>
+                <span>Blocksize 64MB · 8 Particiones</span>
+              </div>
+            </div>
+            <div class="dag-arrow">↓</div>
+            <div class="dag-node node-active">
+              <div class="node-icon">⚡</div>
+              <div class="node-info">
+                <strong>Feature Engineering</strong>
+                <span>errorBalanceOrig Vectorizado</span>
+              </div>
+            </div>
+            <div class="dag-arrow">↓</div>
+            <div class="dag-node node-active">
+              <div class="node-icon">🔄</div>
+              <div class="node-info">
+                <strong>map_partitions()</strong>
+                <span>Filtrado Concurrente & MapReduce</span>
+              </div>
+            </div>
+            <div class="dag-arrow">↓</div>
+            <div class="dag-node node-active node-terminal">
+              <div class="node-icon">🎯</div>
+              <div class="node-info">
+                <strong>.compute()</strong>
+                <span>Persistencia en MongoDB / Parquet</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Comparador de RAM -->
+          <div class="benchmark-box">
+            <h4>Comparativa de Huella de Memoria RAM</h4>
+            <div class="bench-item">
+              <div class="bench-label">
+                <span>Pandas In-Memory (PaySim1 Full)</span>
+                <span class="danger-text">~8,400 MB (Riesgo OOM)</span>
+              </div>
+              <div class="bench-bar"><div class="bench-fill fill-danger" style="width: 95%;"></div></div>
+            </div>
+            <div class="bench-item">
+              <div class="bench-label">
+                <span>Dask Out-Of-Core Streaming</span>
+                <span class="success-text">~350 MB (Estable & Constante)</span>
+              </div>
+              <div class="bench-bar"><div class="bench-fill fill-success" style="width: 14%;"></div></div>
+            </div>
+          </div>
+
+          <!-- Persistencia Híbrida -->
+          <div class="persistence-box">
+            <h4>Persistencia Híbrida NoSQL & Docker</h4>
+            <div class="features-pills">
+              <span class="f-pill">🍃 MongoDB BSON Indexado</span>
+              <span class="f-pill">💾 Respaldo Cloud Data Lake</span>
+              <span class="f-pill">🐳 Dockerfile Multinivel</span>
+              <span class="f-pill">🧪 Test Suites en Pytest</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>Luis Monge · Arquitectura de Datos, IA & Software</span>
+    <span>Desplegado automáticamente con GitHub Pages CI/CD</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
