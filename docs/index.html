@@ -31,10 +31,9 @@
   <main class="dashboard-container">
     <!-- Hero Header -->
     <section class="dashboard-hero">
-      <div class="kicker">BIG DATA · DAGS DISTRIBUIDOS · FASTAPI MICROSERVICE</div>
-      <h1>Detección de Fraude en Tiempo Real & Monitor de Arquitectura</h1>
+      <h1>Detección de Fraude en Tiempo Real &amp; Monitor de Arquitectura</h1>
       <p class="subtitle">
-        Simulador interactivo del contrato REST <code>POST /predict</code> (validado con Pydantic v2) junto al análisis visual de la computación out-of-core de Dask y persistencia híbrida en MongoDB.
+        Simulador interactivo del contrato REST <code>POST /predict</code> validado con Pydantic v2, visualización de computación distribuida out-of-core en Dask y persistencia híbrida en MongoDB.
       </p>
     </section>
 
@@ -171,36 +170,55 @@
           </p>
 
           <!-- Diagrama Interactivo de Nodos Dask -->
-          <div class="dag-pipeline">
+          <div class="dag-pipeline" role="region" aria-label="Pipeline de computación distribuida Dask">
             <div class="dag-node node-active">
-              <div class="node-icon">📦</div>
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
               <div class="node-info">
-                <strong>read_csv()</strong>
-                <span>Blocksize 64MB · 8 Particiones</span>
+                <strong>dd.read_csv()</strong>
+                <span>Particionado por bloques · 64MB streaming</span>
               </div>
             </div>
-            <div class="dag-arrow">↓</div>
+            <div class="dag-arrow" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
             <div class="dag-node node-active">
-              <div class="node-icon">⚡</div>
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
               <div class="node-info">
-                <strong>Feature Engineering</strong>
-                <span>errorBalanceOrig Vectorizado</span>
+                <strong>df.assign()</strong>
+                <span>Cálculo vectorizado de errorBalanceOrig</span>
               </div>
             </div>
-            <div class="dag-arrow">↓</div>
+            <div class="dag-arrow" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
             <div class="dag-node node-active">
-              <div class="node-icon">🔄</div>
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
               <div class="node-info">
                 <strong>map_partitions()</strong>
-                <span>Filtrado Concurrente & MapReduce</span>
+                <span>Filtrado out-of-core concurrente</span>
               </div>
             </div>
-            <div class="dag-arrow">↓</div>
+            <div class="dag-arrow" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
             <div class="dag-node node-active node-terminal">
-              <div class="node-icon">🎯</div>
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <circle cx="12" cy="12" r="6"/>
+                <circle cx="12" cy="12" r="2"/>
+              </svg>
               <div class="node-info">
                 <strong>.compute()</strong>
-                <span>Persistencia en MongoDB / Parquet</span>
+                <span>Persistencia en MongoDB NoSQL & Parquet</span>
               </div>
             </div>
           </div>
@@ -226,12 +244,24 @@
 
           <!-- Persistencia Híbrida -->
           <div class="persistence-box">
-            <h4>Persistencia Híbrida NoSQL & Docker</h4>
+            <h4>Persistencia Híbrida NoSQL &amp; Docker</h4>
             <div class="features-pills">
-              <span class="f-pill">🍃 MongoDB BSON Indexado</span>
-              <span class="f-pill">💾 Respaldo Cloud Data Lake</span>
-              <span class="f-pill">🐳 Dockerfile Multinivel</span>
-              <span class="f-pill">🧪 Test Suites en Pytest</span>
+              <span class="f-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5z"/></svg>
+                MongoDB BSON Indexado
+              </span>
+              <span class="f-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                Data Lake Particionado
+              </span>
+              <span class="f-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Contenedor Docker
+              </span>
+              <span class="f-pill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Suites de Test en Pytest
+              </span>
             </div>
           </div>
         </div>
