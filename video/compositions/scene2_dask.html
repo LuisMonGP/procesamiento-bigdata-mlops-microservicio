@@ -1,0 +1,236 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background-color: #07090e;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 100px;
+    }
+
+    .scene2-title-box {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .kicker {
+      font-size: 28px;
+      color: #38bdf8;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .main-title {
+      font-size: 56px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      width: 100%;
+      max-width: 1500px;
+    }
+
+    .comp-card {
+      background: #0d1117;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 14px;
+      padding: 36px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .comp-name {
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .comp-badge {
+      font-size: 16px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-weight: 700;
+    }
+
+    .badge-pandas {
+      background: rgba(248, 113, 113, 0.18);
+      border: 1px solid rgba(248, 113, 113, 0.5);
+      color: #f87171;
+    }
+
+    .badge-dask {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      color: #10b981;
+    }
+
+    .ram-meter-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .meter-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      color: #94a3b8;
+    }
+
+    .meter-track {
+      width: 100%;
+      height: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .meter-fill-pandas {
+      height: 100%;
+      width: 95%;
+      background: #f87171;
+    }
+
+    .meter-fill-dask {
+      height: 100%;
+      width: 15%;
+      background: #10b981;
+    }
+
+    .comp-desc {
+      font-size: 20px;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .dag-pills {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dag-pill {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+      font-size: 16px;
+      padding: 6px 14px;
+      border-radius: 6px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="scene2_dask" data-width="1920" data-height="1080">
+    <div id="scene2-header" class="scene2-title-box clip" data-start="0" data-duration="9">
+      <div class="kicker">Computación Distribuida Out-of-Core</div>
+      <h1 class="main-title">Pandas In-Memory vs. Dask Streaming</h1>
+    </div>
+
+    <div class="comparison-grid" data-hold="true" data-layout-ignore="true">
+      <!-- Pandas Card -->
+      <div id="scene2-pandas" class="comp-card clip" data-start="0.6" data-duration="8.4">
+        <div class="card-head">
+          <span class="comp-name" style="color:#f87171;">Pandas Clásico</span>
+          <span class="comp-badge badge-pandas">Riesgo OOM</span>
+        </div>
+        <div class="ram-meter-box">
+          <div class="meter-label">
+            <span>Uso de RAM (Carga Monolítica)</span>
+            <span style="color:#f87171; font-weight:700;">~8,400 MB (estimado)</span>
+          </div>
+          <div class="meter-track">
+            <div id="bar-pandas" class="meter-fill-pandas"></div>
+          </div>
+        </div>
+        <p class="comp-desc">
+          Intentar cargar 6.3 millones de registros satura la memoria local en servidores pequeños, provocando reinicios forzados del contenedor.
+        </p>
+      </div>
+
+      <!-- Dask Card -->
+      <div id="scene2-dask" class="comp-card clip" data-start="1.4" data-duration="7.6">
+        <div class="card-head">
+          <span class="comp-name" style="color:#10b981;">Dask Distributed DAG</span>
+          <span class="comp-badge badge-dask">Streaming Constante</span>
+        </div>
+        <div class="ram-meter-box">
+          <div class="meter-label">
+            <span>Uso de RAM (Blocksize 64MB)</span>
+            <span style="color:#10b981; font-weight:700;">~350 MB (Estable)</span>
+          </div>
+          <div class="meter-track">
+            <div id="bar-dask" class="meter-fill-dask"></div>
+          </div>
+        </div>
+        <p class="comp-desc">
+          Divide los datos en particiones lazy evaluadas bajo demanda. Computación out-of-core con memoria plana y predecible.
+        </p>
+        <div class="dag-pills">
+          <span class="dag-pill">dd.read_csv(blocksize="64MB")</span>
+          <span class="dag-pill">df.assign(errorBalanceOrig)</span>
+          <span class="dag-pill">.compute() Terminal</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo(
+      "#scene2-header",
+      { opacity: 0, y: -30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" },
+      0.2
+    );
+
+    tl.fromTo(
+      "#scene2-pandas",
+      { opacity: 0, x: -50 },
+      { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+      0.6
+    );
+
+    tl.fromTo(
+      "#scene2-dask",
+      { opacity: 0, x: 50 },
+      { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+      1.2
+    );
+
+    tl.fromTo(
+      "#bar-pandas",
+      { width: "0%" },
+      { width: "95%", duration: 1.2, ease: "power2.out" },
+      1.0
+    );
+
+    tl.fromTo(
+      "#bar-dask",
+      { width: "0%" },
+      { width: "15%", duration: 0.8, ease: "power2.out" },
+      1.8
+    );
+
+    window.__timelines["scene2_dask"] = tl;
+  </script>
+</template>

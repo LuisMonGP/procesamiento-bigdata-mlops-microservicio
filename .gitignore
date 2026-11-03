@@ -33,3 +33,9 @@ spark-warehouse/
 data/raw/*
 !data/raw/.gitkeep
 !data/sample/*.csv
+
+# HyperFrames build artifacts & cache
+video/.hyperframes/
+video/renders/
+.impeccable/
+

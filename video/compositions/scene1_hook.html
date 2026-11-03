@@ -1,0 +1,199 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background-color: #07090e;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 100px;
+    }
+
+    .header-box {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .kicker {
+      font-size: 28px;
+      color: #38bdf8;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .main-title {
+      font-size: 58px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .ledger-table {
+      width: 100%;
+      max-width: 1500px;
+      background: #0d1117;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .table-head {
+      display: grid;
+      grid-template-columns: 200px 180px 220px 240px 240px 1fr;
+      padding: 18px 24px;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 18px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .table-rows {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .row-item {
+      display: grid;
+      grid-template-columns: 200px 180px 220px 240px 240px 1fr;
+      padding: 16px 24px;
+      font-size: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+      align-items: center;
+    }
+
+    .row-fraud {
+      background: rgba(248, 113, 113, 0.12);
+      border: 1px solid rgba(248, 113, 113, 0.45);
+      color: #ffffff;
+    }
+
+    .val-danger {
+      color: #f87171;
+      font-weight: 700;
+    }
+
+    .alert-pill {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 16px;
+      font-weight: 700;
+      background: rgba(248, 113, 113, 0.25);
+      color: rgb(250, 144, 144);
+      border: 1px solid rgba(248, 113, 113, 0.6);
+      text-align: center;
+    }
+
+    .footer-stat {
+      margin-top: 36px;
+      font-size: 28px;
+      color: #94a3b8;
+    }
+
+    .footer-stat strong {
+      color: #38bdf8;
+    }
+  </style>
+
+  <div id="root" data-composition-id="scene1_hook" data-width="1920" data-height="1080">
+    <div id="scene1-header" class="header-box clip" data-start="0" data-duration="8">
+      <div class="kicker">PaySim1 Financial Dataset</div>
+      <h1 class="main-title">6,362,620 Transacciones Financieras</h1>
+    </div>
+
+    <div id="scene1-table" class="ledger-table clip" data-start="0.5" data-duration="7.5" data-hold="true" data-layout-ignore="true">
+      <div class="table-head">
+        <span>ID Transacción</span>
+        <span>Operación</span>
+        <span>Monto</span>
+        <span>Saldo Inicial</span>
+        <span>Saldo Final</span>
+        <span>Estado Ledger</span>
+      </div>
+
+      <div class="table-rows">
+        <div class="row-item" id="row-norm-1">
+          <span>TXN-405008</span>
+          <span style="color:#10b981;">PAYMENT</span>
+          <span>$180.50</span>
+          <span>$4,200.00</span>
+          <span>$4,019.50</span>
+          <span style="color:#10b981;">✓ CUADRADO</span>
+        </div>
+        <div class="row-item" id="row-norm-2">
+          <span>TXN-405009</span>
+          <span style="color:#10b981;">PAYMENT</span>
+          <span>$95.00</span>
+          <span>$1,120.00</span>
+          <span>$1,025.00</span>
+          <span style="color:#10b981;">✓ CUADRADO</span>
+        </div>
+        <div class="row-item row-fraud" id="row-fraud">
+          <span style="font-weight:700; color:#38bdf8;">TXN-405011</span>
+          <span style="color:#f87171; font-weight:700;">TRANSFER</span>
+          <span class="val-danger">$250,000.00</span>
+          <span>$250,000.00</span>
+          <span class="val-danger">$0.00</span>
+          <span><span class="alert-pill">VACIADO TOTAL</span></span>
+        </div>
+        <div class="row-item" id="row-norm-3">
+          <span>TXN-405012</span>
+          <span style="color:#10b981;">CASH-IN</span>
+          <span>$1,500.00</span>
+          <span>$3,000.00</span>
+          <span>$4,500.00</span>
+          <span style="color:#10b981;">✓ CUADRADO</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="scene1-footer" class="footer-stat clip" data-start="2.5" data-duration="5.5">
+      Identificando el fraude antes de que el capital salga del sistema.
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo(
+      "#scene1-header",
+      { opacity: 0.8, y: -10 },
+      { opacity: 1, y: 0, duration: 0.6, ease: "power4.out" },
+      0
+    );
+
+    tl.fromTo(
+      "#scene1-table",
+      { opacity: 0, scale: 0.96 },
+      { opacity: 1, scale: 1, duration: 0.9, ease: "power3.out" },
+      0.6
+    );
+
+    tl.fromTo(
+      "#row-fraud",
+      { backgroundColor: "rgba(255,255,255,0.02)" },
+      { backgroundColor: "rgba(248, 113, 113, 0.16)", duration: 0.5, ease: "power2.out" },
+      1.8
+    );
+
+    tl.fromTo(
+      "#scene1-footer",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      2.5
+    );
+
+    window.__timelines["scene1_hook"] = tl;
+  </script>
+</template>

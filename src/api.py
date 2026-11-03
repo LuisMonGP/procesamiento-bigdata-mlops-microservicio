@@ -7,32 +7,33 @@ en tiempo real (/predict) sobre transacciones financieras, calculando errorBalan
 from __future__ import annotations
 
 import time
-from typing import Dict, Literal
+from typing import Any, Dict, Literal
 from fastapi import FastAPI, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 
 class TransaccionInput(BaseModel):
     """Esquema de validación estricta para transacciones entrantes de PaySim."""
 
-    transaccion_id: str = Field(..., example="TXN-405011", description="ID de trazabilidad de la transacción")
+    transaccion_id: str = Field(..., examples=["TXN-405011"], description="ID de trazabilidad de la transacción")
     tipo_operacion: Literal["CASH-IN", "CASH-OUT", "DEBIT", "PAYMENT", "TRANSFER"] = Field(
-        ..., example="TRANSFER", description="Tipo oficial de operación financiera"
+        ..., examples=["TRANSFER"], description="Tipo oficial de operación financiera"
     )
     amount: float = Field(
-        ..., gt=0.0, example=250000.0, description="Monto en moneda local (debe ser estrictamente positivo)"
+        ..., gt=0.0, examples=[250000.0], description="Monto en moneda local (debe ser estrictamente positivo)"
     )
     oldbalanceOrg: float = Field(
-        ..., ge=0.0, example=250000.0, description="Saldo previo de la cuenta de origen"
+        ..., ge=0.0, examples=[250000.0], description="Saldo previo de la cuenta de origen"
     )
     newbalanceOrig: float = Field(
-        ..., ge=0.0, example=0.0, description="Saldo posterior de la cuenta de origen"
+        ..., ge=0.0, examples=[0.0], description="Saldo posterior de la cuenta de origen"
     )
     oldbalanceDest: float = Field(
-        ..., ge=0.0, example=0.0, description="Saldo previo de la cuenta de destino"
+        ..., ge=0.0, examples=[0.0], description="Saldo previo de la cuenta de destino"
     )
     newbalanceDest: float = Field(
-        ..., ge=0.0, example=250000.0, description="Saldo posterior de la cuenta de destino"
+        ..., ge=0.0, examples=[250000.0], description="Saldo posterior de la cuenta de destino"
     )
 
 
@@ -61,6 +62,14 @@ app = FastAPI(
     title="Microservicio MLOps de Detección de Fraude Transaccional",
     description="API de inferencia en tiempo real para prevención de fraude financiero sobre PaySim.",
     version="1.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

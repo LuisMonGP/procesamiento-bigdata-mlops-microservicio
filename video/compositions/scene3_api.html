@@ -1,0 +1,173 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background-color: #07090e;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 100px;
+    }
+
+    .scene3-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .kicker {
+      font-size: 28px;
+      color: #38bdf8;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .main-title {
+      font-size: 56px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .api-panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      width: 100%;
+      max-width: 1540px;
+    }
+
+    .code-box {
+      background: #0d1117;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .box-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    pre {
+      background: #05080e;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 20px;
+      font-size: 19px;
+      line-height: 1.5;
+      color: #a5f3fc;
+      overflow: hidden;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .badge-422 {
+      background: rgba(248, 113, 113, 0.15);
+      border: 1px solid rgba(248, 113, 113, 0.5);
+      color: #f87171;
+    }
+
+    .badge-formula {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+    }
+  </style>
+
+  <div id="root" data-composition-id="scene3_api" data-width="1920" data-height="1080">
+    <div id="scene3-header-el" class="scene3-header clip" data-start="0" data-duration="10">
+      <div class="kicker">Microservicio FastAPI &amp; Pydantic v2</div>
+      <h1 class="main-title">Invariante Contable &amp; Barrera de Contratos</h1>
+    </div>
+
+    <div class="api-panels" data-hold="true" data-layout-ignore="true">
+      <!-- Panel 1: Formula errorBalanceOrig -->
+      <div id="panel-formula" class="code-box clip" data-start="0.6" data-duration="9.4">
+        <div class="box-title">
+          <span>01 · Invariante Financiera</span>
+          <span class="status-badge badge-formula">Vectorizado</span>
+        </div>
+        <pre><code># Deducción de discrepancia de saldo
+errorBalanceOrig = (
+    newbalanceOrig + amount - oldbalanceOrg
+)
+
+# En fraude PaySim:
+# newbalanceOrig = 0, amount = 250k
+# Saldo previo = 250k -> Drenado exacto</code></pre>
+        <p style="font-size:18px; color:#94a3b8; line-height:1.5;">
+          Permite al modelo identificar transacciones con balance alterado o vaciados directos de saldo.
+        </p>
+      </div>
+
+      <!-- Panel 2: Pydantic Validation 422 -->
+      <div id="panel-pydantic" class="code-box clip" data-start="1.4" data-duration="8.6">
+        <div class="box-title">
+          <span>02 · Barrera de Validación</span>
+          <span class="status-badge badge-422">HTTP 422 RECHAZADO</span>
+        </div>
+        <pre><code>// Petición con monto corrupto (amount: -500.0)
+// Respuesta inmediata de FastAPI:
+{
+  "detail": [{
+    "type": "greater_than",
+    "loc": ["body", "amount"],
+    "msg": "Input should be greater than 0"
+  }],
+  "status_code": 422
+}</code></pre>
+        <p style="font-size:18px; color:#94a3b8; line-height:1.5;">
+          Protección en la frontera del API: los datos corruptos se descartan sin consumir CPU del modelo.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo(
+      "#scene3-header-el",
+      { opacity: 0, y: -30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" },
+      0.2
+    );
+
+    tl.fromTo(
+      "#panel-formula",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      0.6
+    );
+
+    tl.fromTo(
+      "#panel-pydantic",
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      1.2
+    );
+
+    window.__timelines["scene3_api"] = tl;
+  </script>
+</template>

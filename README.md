@@ -96,6 +96,14 @@ docker-compose up --build -d
 
 ---
 
+## Video Demostrativo & HyperFrames
+
+El proyecto incluye un video técnico animado generado de manera determinista con **HyperFrames** (GSAP + HTML5/CSS) disponible en el repositorio:
+- 📹 **Video MP4:** [`mlops_fraud_detection.mp4`](mlops_fraud_detection.mp4) (1080p Full HD, 45 segundos, 3.8 MB).
+- 🎬 **Proyecto HyperFrames reproducible:** Directorio [`video/`](video/) con especificación temporal ([`video/SPEC.md`](video/SPEC.md)), storylines y código fuente de escenas modulares.
+
+---
+
 ## Autor
 **Luis Monge**  
 - Portfolio: [portfoliochess.pages.dev](https://portfoliochess.pages.dev)  

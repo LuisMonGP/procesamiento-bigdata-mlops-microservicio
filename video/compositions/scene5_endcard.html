@@ -1,0 +1,138 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background-color: #07090e;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 100px;
+      text-align: center;
+    }
+
+    .kicker {
+      font-size: 28px;
+      color: #38bdf8;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .main-title {
+      font-size: 64px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .subtitle-claim {
+      font-size: 28px;
+      color: #94a3b8;
+      max-width: 1100px;
+      line-height: 1.5;
+      margin-bottom: 48px;
+    }
+
+    .meta-cards {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 48px;
+    }
+
+    .meta-card {
+      background: #0d1117;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      padding: 18px 32px;
+      font-size: 28px;
+      color: #cbd5e1;
+    }
+
+    .meta-card strong {
+      color: #38bdf8;
+    }
+
+    .author-box {
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      padding-top: 32px;
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .author-name {
+      font-size: 36px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .author-role {
+      font-size: 28px;
+      color: #94a3b8;
+    }
+
+    .repo-link {
+      font-size: 28px;
+      color: #38bdf8;
+      margin-top: 8px;
+    }
+  </style>
+
+  <div id="root" data-composition-id="scene5_endcard" data-width="1920" data-height="1080">
+    <div id="endcard-header" class="clip" data-start="0" data-duration="7">
+      <div class="kicker">Big Data · MLOps · FastApi</div>
+      <h1 class="main-title">Detección de Fraude en Tiempo Real</h1>
+      <p class="subtitle-claim">
+        Procesamiento distribuido out-of-core con Dask y microservicio asíncrono en producción.
+      </p>
+    </div>
+
+    <div id="endcard-metrics" class="meta-cards clip" data-start="0.6" data-duration="6.4">
+      <div class="meta-card"><strong>6.3M+</strong> Transacciones</div>
+      <div class="meta-card"><strong>&lt; 1.5 ms</strong> Latencia P95</div>
+      <div class="meta-card"><strong>HTTP 422</strong> Validación Pydantic</div>
+      <div class="meta-card"><strong>6/6</strong> Tests Pytest ✓</div>
+    </div>
+
+    <div id="endcard-author" class="author-box clip" data-start="1.2" data-duration="5.8">
+      <div class="author-name">Luis Monge</div>
+      <div class="author-role">Arquitectura de Datos, IA &amp; Software</div>
+      <div class="repo-link">github.com/luismongp/procesamiento-bigdata-mlops-microservicio</div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo(
+      "#endcard-header",
+      { opacity: 0, y: -25 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" },
+      0.2
+    );
+
+    tl.fromTo(
+      "#endcard-metrics",
+      { opacity: 0, scale: 0.95 },
+      { opacity: 1, scale: 1, duration: 0.8, ease: "power3.out" },
+      0.6
+    );
+
+    tl.fromTo(
+      "#endcard-author",
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+      1.2
+    );
+
+    window.__timelines["scene5_endcard"] = tl;
+  </script>
+</template>

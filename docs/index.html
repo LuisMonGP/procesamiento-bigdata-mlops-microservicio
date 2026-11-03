@@ -3,27 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MLOps Fraud Scoring & Dask Big Data Hub | Luis Monge</title>
+  <title>MLOps Fraud Scoring &amp; Dask Big Data Hub | Luis Monge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <!-- Barra de Estado Superior -->
   <header class="top-nav">
     <div class="brand">
-      <span class="status-indicator live"></span>
+      <span class="status-indicator live" role="status" aria-label="Microservicio Operativo: Simulación Activa"></span>
       <span class="brand-title">MLOPS COMMAND CENTER</span>
-      <span class="version-tag">v1.0.0 · PaySim1 Engine</span>
+      <span class="version-tag">v1.1.0 · PaySim1 Engine</span>
     </div>
+
+    <!-- Selector de Motor: Simulador Cloud vs FastAPI Local -->
+    <div class="backend-mode-toggle" role="group" aria-label="Modo de ejecución del backend">
+      <span class="mode-label">Motor:</span>
+      <button type="button" class="mode-btn mode-active" id="btn-mode-browser" data-mode="browser">
+        <span class="mode-dot dot-browser"></span>
+        Simulador Cloud
+      </button>
+      <button type="button" class="mode-btn" id="btn-mode-api" data-mode="api" title="Conecta con el microservicio uvicorn en localhost:8000">
+        <span class="mode-dot dot-api" id="api-status-dot"></span>
+        FastAPI Local (:8000)
+      </button>
+    </div>
+
     <div class="nav-links">
-      <a href="https://github.com/LuisMonGP/procesamiento-bigdata-mlops-microservicio" target="_blank" class="nav-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      <a href="https://github.com/LuisMonGP/procesamiento-bigdata-mlops-microservicio" target="_blank" class="nav-btn" rel="noopener noreferrer">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         GitHub Repo
       </a>
-      <a href="https://portfoliochess.pages.dev" target="_blank" class="nav-btn portfolio-btn">
-        ♟ PortfolioChess
+      <a href="https://portfoliochess.pages.dev" target="_blank" class="nav-btn portfolio-btn" rel="noopener noreferrer">
+        PortfolioChess
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
       </a>
     </div>
   </header>
@@ -31,10 +46,29 @@
   <main class="dashboard-container">
     <!-- Hero Header -->
     <section class="dashboard-hero">
-      <h1>Detección de Fraude en Tiempo Real &amp; Monitor de Arquitectura</h1>
+      <h1 class="hero-title">Detección de Fraude en Tiempo Real &amp; Monitor de Arquitectura</h1>
       <p class="subtitle">
         Simulador interactivo del contrato REST <code>POST /predict</code> validado con Pydantic v2, visualización de computación distribuida out-of-core en Dask y persistencia híbrida en MongoDB.
       </p>
+
+      <!-- Barra de Demostración Guiada (Tour Automático en 3 Pasos) -->
+      <div class="guided-tour-bar" id="guided-tour-bar" role="region" aria-label="Tour de simulación guiada">
+        <div class="tour-controls">
+          <button type="button" class="tour-trigger-btn" id="btn-start-tour">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span id="tour-btn-text">Ver Demostración Guiada (3 Pasos)</span>
+          </button>
+          <div class="tour-stepper" id="tour-stepper">
+            <span class="tour-step-dot" data-step="1">1. Normal</span>
+            <span class="tour-step-dot" data-step="2">2. Fraude</span>
+            <span class="tour-step-dot" data-step="3">3. Error 422</span>
+          </div>
+        </div>
+        <div class="tour-message" id="tour-message">
+          <strong id="tour-step-title">Modo Explorador:</strong>
+          <span id="tour-step-desc">Usa los controles inferiores o pulsa "Ver Demostración Guiada" para un recorrido interactivo de 15 segundos.</span>
+        </div>
+      </div>
     </section>
 
     <!-- Panel Grid Principal -->
@@ -42,10 +76,10 @@
       <!-- Columna Izquierda: Simulador POST /predict -->
       <section class="card simulator-card">
         <div class="card-header">
-          <div class="card-title">
+          <h2 class="card-title">
             <span class="badge method-post">POST</span>
             <span class="endpoint">/predict</span>
-          </div>
+          </h2>
           <span class="latency-pill" id="live-latency">0.42 ms</span>
         </div>
 
@@ -70,25 +104,34 @@
           <div class="form-group">
             <div class="label-with-val">
               <label for="amount">Monto de la Transacción ($)</label>
-              <span class="dynamic-val" id="val-amount">$250,000</span>
+              <div class="val-input-wrapper">
+                <span class="curr-sign" aria-hidden="true">$</span>
+                <input type="number" id="num-amount" class="num-direct-input" min="0" max="1000000" step="1" value="250000" aria-label="Monto numérico exacto">
+              </div>
             </div>
-            <input type="range" id="amount" min="100" max="1000000" step="500" value="250000">
+            <input type="range" id="amount" min="100" max="1000000" step="500" value="250000" aria-label="Monto de la transacción slider">
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <div class="label-with-val">
                 <label for="oldbalanceOrg">Saldo Inicial Origen</label>
-                <span class="dynamic-val" id="val-oldbalanceOrg">$250,000</span>
+                <div class="val-input-wrapper">
+                  <span class="curr-sign" aria-hidden="true">$</span>
+                  <input type="number" id="num-oldbalanceOrg" class="num-direct-input" min="0" max="1000000" step="1" value="250000" aria-label="Saldo inicial origen numérico exacto">
+                </div>
               </div>
-              <input type="range" id="oldbalanceOrg" min="0" max="1000000" step="500" value="250000">
+              <input type="range" id="oldbalanceOrg" min="0" max="1000000" step="500" value="250000" aria-label="Saldo inicial origen slider">
             </div>
             <div class="form-group">
               <div class="label-with-val">
                 <label for="newbalanceOrig">Saldo Final Origen</label>
-                <span class="dynamic-val" id="val-newbalanceOrig">$0</span>
+                <div class="val-input-wrapper">
+                  <span class="curr-sign" aria-hidden="true">$</span>
+                  <input type="number" id="num-newbalanceOrig" class="num-direct-input" min="0" max="1000000" step="1" value="0" aria-label="Saldo final origen numérico exacto">
+                </div>
               </div>
-              <input type="range" id="newbalanceOrig" min="0" max="1000000" step="500" value="0">
+              <input type="range" id="newbalanceOrig" min="0" max="1000000" step="500" value="0" aria-label="Saldo final origen slider">
             </div>
           </div>
 
@@ -96,25 +139,32 @@
             <div class="form-group">
               <div class="label-with-val">
                 <label for="oldbalanceDest">Saldo Inicial Destino</label>
-                <span class="dynamic-val" id="val-oldbalanceDest">$0</span>
+                <div class="val-input-wrapper">
+                  <span class="curr-sign" aria-hidden="true">$</span>
+                  <input type="number" id="num-oldbalanceDest" class="num-direct-input" min="0" max="1000000" step="1" value="0" aria-label="Saldo inicial destino numérico exacto">
+                </div>
               </div>
-              <input type="range" id="oldbalanceDest" min="0" max="1000000" step="500" value="0">
+              <input type="range" id="oldbalanceDest" min="0" max="1000000" step="500" value="0" aria-label="Saldo inicial destino slider">
             </div>
             <div class="form-group">
               <div class="label-with-val">
                 <label for="newbalanceDest">Saldo Final Destino</label>
-                <span class="dynamic-val" id="val-newbalanceDest">$250,000</span>
+                <div class="val-input-wrapper">
+                  <span class="curr-sign" aria-hidden="true">$</span>
+                  <input type="number" id="num-newbalanceDest" class="num-direct-input" min="0" max="1000000" step="1" value="250000" aria-label="Saldo final destino numérico exacto">
+                </div>
               </div>
-              <input type="range" id="newbalanceDest" min="0" max="1000000" step="500" value="250000">
+              <input type="range" id="newbalanceDest" min="0" max="1000000" step="500" value="250000" aria-label="Saldo final destino slider">
             </div>
           </div>
 
           <!-- Presets rápidos -->
-          <div class="presets-container">
+          <div class="presets-container" role="group" aria-label="Escenarios rápidos de prueba">
             <span class="presets-label">Escenarios Rápidos:</span>
             <button type="button" class="preset-btn" id="preset-drain">Vaciado de Cuenta</button>
             <button type="button" class="preset-btn" id="preset-legit">Pago Comercial Típico</button>
             <button type="button" class="preset-btn" id="preset-cashout">Retiro Masivo</button>
+            <button type="button" class="preset-btn preset-danger" id="preset-error-422">Inyectar Error 422 (Pydantic)</button>
           </div>
         </form>
 
@@ -125,9 +175,20 @@
             <span class="badge-status" id="badge-alert">CRÍTICO</span>
           </div>
 
+          <!-- Diagnóstico en Lenguaje Humano (Traductor de Negocio) -->
+          <div class="business-diagnosis" id="business-diagnosis">
+            <div class="diagnosis-header">
+              <span class="diagnosis-label">Diagnóstico de Negocio</span>
+              <span class="diagnosis-tag" id="diagnosis-tag">Alerta de Seguridad</span>
+            </div>
+            <p class="diagnosis-text" id="diagnosis-text">
+              Vaciado total de saldo origen en una operación TRANSFER. Patrón característico de fraude por sustracción no autorizada.
+            </p>
+          </div>
+
           <div class="score-bar-wrapper">
             <div class="score-bar-labels">
-              <span>Probabilidad de Fraude</span>
+              <span>Probabilidad de Riesgo Estimada</span>
               <span id="score-text">89.4%</span>
             </div>
             <div class="score-progress">
@@ -137,7 +198,10 @@
 
           <div class="metrics-grid">
             <div class="metric-item">
-              <span class="metric-name">Invariante Contable (errorBalanceOrig)</span>
+              <span class="metric-name">
+                Invariante Contable (errorBalanceOrig)
+                <span class="tooltip-trigger" title="Fórmula: newbalanceOrig + amount - oldbalanceOrg. Un saldo en 0 tras transferencia sin coincidencia de balance evidencia vaciado patrimonial en PaySim1." aria-label="Detalle de invariante contable">ℹ</span>
+              </span>
               <span class="metric-val" id="res-error">0.00</span>
             </div>
             <div class="metric-item">
@@ -148,8 +212,14 @@
 
           <!-- JSON Payload Inspector -->
           <div class="json-preview">
-            <div class="json-header">Payload JSON (Pydantic Contract)</div>
-            <pre><code id="json-code"></code></pre>
+            <div class="json-header">
+              <span>Contrato JSON de Intercambio (FastAPI &amp; Pydantic v2)</span>
+              <button type="button" class="copy-payload-btn" id="btn-copy-payload" aria-label="Copiar JSON al portapapeles">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span id="copy-btn-text">Copiar Payload</span>
+              </button>
+            </div>
+            <pre><code id="json-code" class="json-code"></code></pre>
           </div>
         </div>
       </section>
@@ -157,48 +227,62 @@
       <!-- Columna Derecha: DAG Dask & Arquitectura Big Data -->
       <section class="card dask-card">
         <div class="card-header">
-          <div class="card-title">
+          <h2 class="card-title">
             <span class="badge badge-dask">DASK DAG</span>
             <span>Computación Out-Of-Core vs Pandas</span>
-          </div>
-          <span class="memory-pill">350 MB RAM Streaming</span>
+          </h2>
+          <span class="memory-pill" id="memory-pill-status">350 MB RAM Streaming</span>
         </div>
 
         <div class="dask-body">
           <p class="section-desc">
-            Al procesar millones de registros (PaySim1), un script tradicional con <code>pandas.read_csv()</code> carga la totalidad en memoria provocando fallos por <strong>Out-Of-Memory (OOM)</strong>. Dask construye un Grafo Acíclico Dirigido (DAG) particionado de evaluación perezosa (<em>Lazy</em>).
+            Al procesar 6.3 millones de transacciones de PaySim1, <code>pandas.read_csv()</code> satura la memoria física provocando <strong>Out-Of-Memory (OOM)</strong>. Dask construye un Grafo Acíclico Dirigido (DAG) particionado de evaluación perezosa (<em>Lazy</em>).
           </p>
 
+          <!-- Selector de Tamaño de Bloque -->
+          <div class="blocksize-bar" role="group" aria-label="Configuración de particionado Dask">
+            <span class="blocksize-title">Tamaño de Partición (Blocksize):</span>
+            <div class="blocksize-options">
+              <button type="button" class="bs-btn" data-bs="32">32 MB · 16 Particiones</button>
+              <button type="button" class="bs-btn bs-active" data-bs="64">64 MB · 8 Particiones (Prod)</button>
+              <button type="button" class="bs-btn" data-bs="128">128 MB · 4 Particiones</button>
+            </div>
+          </div>
+
           <!-- Diagrama Interactivo de Nodos Dask -->
-          <div class="dag-pipeline" role="region" aria-label="Pipeline de computación distribuida Dask">
-            <div class="dag-node node-active">
-              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <div class="dag-pipeline" role="region" aria-label="Pipeline interactivo de tareas Dask">
+            <button type="button" class="dag-node node-interactive is-selected" data-step="read_csv">
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
                 <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
                 <line x1="12" y1="22.08" x2="12" y2="12"/>
               </svg>
               <div class="node-info">
                 <strong>dd.read_csv()</strong>
-                <span>Particionado por bloques · 64MB streaming</span>
+                <span id="node-read-desc">Particionado en bloques · 64MB streaming</span>
               </div>
-            </div>
+            </button>
+
             <div class="dag-arrow" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
             </div>
-            <div class="dag-node node-active">
-              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <button type="button" class="dag-node node-interactive" data-step="assign">
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
               </svg>
               <div class="node-info">
                 <strong>df.assign()</strong>
                 <span>Cálculo vectorizado de errorBalanceOrig</span>
               </div>
-            </div>
+            </button>
+
             <div class="dag-arrow" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
             </div>
-            <div class="dag-node node-active">
-              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <button type="button" class="dag-node node-interactive" data-step="map_partitions">
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="23 4 23 10 17 10"/>
                 <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
               </svg>
@@ -206,26 +290,40 @@
                 <strong>map_partitions()</strong>
                 <span>Filtrado out-of-core concurrente</span>
               </div>
-            </div>
+            </button>
+
             <div class="dag-arrow" aria-hidden="true">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
             </div>
-            <div class="dag-node node-active node-terminal">
-              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <button type="button" class="dag-node node-interactive node-terminal" data-step="compute">
+              <svg class="node-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <circle cx="12" cy="12" r="10"/>
                 <circle cx="12" cy="12" r="6"/>
                 <circle cx="12" cy="12" r="2"/>
               </svg>
               <div class="node-info">
                 <strong>.compute()</strong>
-                <span>Persistencia en MongoDB NoSQL & Parquet</span>
+                <span>Persistencia en MongoDB NoSQL &amp; Parquet</span>
               </div>
+            </button>
+          </div>
+
+          <!-- Inspector de Código de Nodo Dask -->
+          <div class="dag-code-inspector" id="dag-code-inspector" role="region" aria-label="Visor de código Dask">
+            <div class="inspector-header">
+              <span class="inspector-badge" id="inspector-badge">Paso 1: Ingesta Dask</span>
+              <span class="inspector-filename">src/bigdata_processor.py</span>
             </div>
+            <pre><code id="inspector-code">ddf = dd.read_csv(df_o_ruta, dtype=dtypes, blocksize="64MB")</code></pre>
+            <p class="inspector-doc" id="inspector-doc">
+              Lectura particionada en chunks de memoria sin sobrepasar el umbral de RAM del contenedor.
+            </p>
           </div>
 
           <!-- Comparador de RAM -->
           <div class="benchmark-box">
-            <h4>Comparativa de Huella de Memoria RAM</h4>
+            <h3 class="section-heading">Comparativa de Huella de Memoria RAM</h3>
             <div class="bench-item">
               <div class="bench-label">
                 <span>Pandas In-Memory (PaySim1 Full)</span>
@@ -236,7 +334,7 @@
             <div class="bench-item">
               <div class="bench-label">
                 <span>Dask Out-Of-Core Streaming</span>
-                <span class="success-text">~350 MB (Estable & Constante)</span>
+                <span class="success-text" id="bench-dask-label">~350 MB (Estable &amp; Constante)</span>
               </div>
               <div class="bench-bar"><div class="bench-fill fill-success" style="width: 14%;"></div></div>
             </div>
@@ -244,22 +342,22 @@
 
           <!-- Persistencia Híbrida -->
           <div class="persistence-box">
-            <h4>Persistencia Híbrida NoSQL &amp; Docker</h4>
+            <h3 class="section-heading">Persistencia Híbrida NoSQL &amp; Docker</h3>
             <div class="features-pills">
               <span class="f-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5z"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5z"/></svg>
                 MongoDB BSON Indexado
               </span>
               <span class="f-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
                 Data Lake Particionado
               </span>
               <span class="f-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 Contenedor Docker
               </span>
               <span class="f-pill">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                 Suites de Test en Pytest
               </span>
             </div>
@@ -270,7 +368,7 @@
   </main>
 
   <footer class="footer">
-    <span>Luis Monge · Arquitectura de Datos, IA & Software</span>
+    <span>Luis Monge · Arquitectura de Datos, IA &amp; Software</span>
     <span>Desplegado automáticamente con GitHub Pages CI/CD</span>
   </footer>
 

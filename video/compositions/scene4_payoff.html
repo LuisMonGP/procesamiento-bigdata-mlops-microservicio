@@ -1,0 +1,153 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      background-color: #07090e;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', monospace;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 80px;
+    }
+
+    .scene4-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .kicker {
+      font-size: 28px;
+      color: #38bdf8;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .main-title {
+      font-size: 52px;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .dashboard-frame {
+      width: 100%;
+      max-width: 1560px;
+      height: 720px;
+      background: #0d1117;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .dashboard-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .floating-overlay-card {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      background: rgba(13, 17, 23, 0.95);
+      border: 1px solid rgba(248, 113, 113, 0.5);
+      border-radius: 10px;
+      padding: 24px 28px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      max-width: 580px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .overlay-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .alert-badge {
+      background: rgba(248, 113, 113, 0.2);
+      border: 1px solid rgba(248, 113, 113, 0.6);
+      color: #f87171;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 15px;
+    }
+
+    .overlay-text {
+      font-size: 17px;
+      color: #e2e8f0;
+      line-height: 1.5;
+    }
+
+    .overlay-latency {
+      font-size: 15px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+  </style>
+
+  <div id="root" data-composition-id="scene4_payoff" data-width="1920" data-height="1080">
+    <div id="scene4-title" class="scene4-header clip" data-start="0" data-duration="11">
+      <div class="kicker">Demostración en Vivo · GitHub Pages</div>
+      <h1 class="main-title">Inferencia en Producción &amp; Diagnóstico de Negocio</h1>
+    </div>
+
+    <div id="scene4-frame" class="dashboard-frame clip" data-start="0.6" data-duration="10.4" data-hold="true" data-layout-ignore="true">
+      <img src="assets/images/dashboard_ui.png" alt="Dashboard MLOps de Detección de Fraude">
+
+      <div id="scene4-overlay" class="floating-overlay-card clip" data-start="1.8" data-duration="9.2" data-hold="true" data-layout-ignore="true">
+        <div class="overlay-title">
+          <span style="color:#ffffff;">Veredicto de Inteligencia</span>
+          <span class="alert-badge">CRÍTICO (89.4%)</span>
+        </div>
+        <p class="overlay-text">
+          "Vaciado total de saldo: la cuenta transfirió el 100% de sus fondos ($250,000) quedando en $0.00. Patrón de fraude detectado en PaySim1."
+        </p>
+        <div class="overlay-latency">
+          ⚡ Latencia P95 del Microservicio: 1.45 ms · SLA &lt; 50 ms
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true });
+
+    tl.fromTo(
+      "#scene4-title",
+      { opacity: 0, y: -30 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power4.out" },
+      0.2
+    );
+
+    tl.fromTo(
+      "#scene4-frame",
+      { opacity: 0, scale: 0.94 },
+      { opacity: 1, scale: 1, duration: 1.0, ease: "power3.out" },
+      0.6
+    );
+
+    tl.fromTo(
+      "#scene4-overlay",
+      { opacity: 0, x: 40 },
+      { opacity: 1, x: 0, duration: 0.8, ease: "power3.out" },
+      1.8
+    );
+
+    window.__timelines["scene4_payoff"] = tl;
+  </script>
+</template>
